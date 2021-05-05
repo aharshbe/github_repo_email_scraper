@@ -10,7 +10,7 @@ key = ""
     # example of org search: paritytech/polkadot
     # example of user search: gavofyork/scripts
 search = "" 
-repo = f"https://api.github.com/repos/{search}/contributors"
+repo = f"https://api.github.com/repos/{search}/contributors?q=contributions&order=desc"
 
 # Class which does cool scraping functions
 class Scraper:
