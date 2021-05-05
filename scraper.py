@@ -68,7 +68,7 @@ test = Scraper(key)
 good = test.test_rate_limit()
 if good != 1:
     rate_limit = test.auth_request("https://api.github.com/rate_limit").json()["rate"]["reset"]
-    print(f"problem with your auth token or your rate limit was exceeded. If the problem is your rate limit, covert your epoch stamp ({rate_limit}) to your time zone to see when it will reset, use (https://www.epochconverter.com/).")
+    print(f"problem with your auth token or your rate limit was exceeded. If the problem is your rate limit, convert your epoch stamp ({rate_limit}) to your time zone to see when it will reset, use (https://www.epochconverter.com/).")
     exit()
 
 # intantiate new scraper object
