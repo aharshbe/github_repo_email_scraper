@@ -1,11 +1,13 @@
 
 import requests
+from os import system
 
-# GitHub API key - replace with your key
+# GitHub API key
+username = ""
 key = ""
-# repo to search - replace with any repo, follow the org/repo syntax
+# repo to search
 search = "paritytech/polkadot"
-repo = "https://api.github.com/repos/"+search+"/contributors"
+repo = f"https://api.github.com/repos/{search}/contributors"
 
 # Class which does cool scraping functions
 class Scraper:
@@ -14,8 +16,7 @@ class Scraper:
         self.key = key
     # create an auth request
     def auth_request(self, repo_url):
-        headers = {'Authorization': self.key}
-        response = requests.get(repo_url, headers=headers)
+        response = requests.get(repo_url, auth=(username, key))
         return response
     def test_rate_limit(self):
         # testing
@@ -43,7 +44,7 @@ class Scraper:
             print("no handels found, exiting...")
             exit()
     def obtain_email(self, handel):
-        request_email = "https://api.github.com/users/"+handel+"/events/public"
+        request_email = f"https://api.github.com/users/{handel}/events/public"
         obtain_email_response = self.auth_request(request_email).json()
         for response in obtain_email_response:
             try:
@@ -51,6 +52,7 @@ class Scraper:
                 print("found email for "+handel)
                 return email
             except:
+                system('cls')
                 print("searching...")
 # example:
     # new_request = Scraper(key)
@@ -83,6 +85,8 @@ email_handel_dict = {}
 for handel in handels:
     # store email and handel in dictionary
     email_handel_dict[handel] = s.obtain_email(handel)
+system('cls')
+print(f"Here is a dictionary of handels and their emails for {len(email_handel_dict.keys())} contributors of {search}:")
 print(email_handel_dict)
 
 # EOF
