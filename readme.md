@@ -1,4 +1,4 @@
-# GitHub Repo Scraper
+# GitHub Repo Email Scraper
 
 ### Description:
   Scrape emails of contributors who work on identified open source projects (helpful in automating sourcing for talent aquisition teams)
