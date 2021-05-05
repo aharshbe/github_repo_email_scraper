@@ -6,7 +6,10 @@ from os import system
 username = ""
 key = ""
 # repo to search
-search = "paritytech/polkadot"
+    # follow org/repo or user/repo syntax
+    # example of org search: paritytech/polkadot
+    # example of user search: gavofyork/scripts
+search = "" 
 repo = f"https://api.github.com/repos/{search}/contributors"
 
 # Class which does cool scraping functions
@@ -20,8 +23,7 @@ class Scraper:
         return response
     def test_rate_limit(self):
         # testing
-        check_status = "https://api.github.com"
-        if (len(self.auth_request(check_status).json())>2):
+        if (len(self.auth_request("https://api.github.com").json())>2):
             print("You're good to continue")
             return 1
         else:
@@ -32,9 +34,13 @@ class Scraper:
         for key in response:
             # obtain contributor GitHub handles
             handel = key["login"]
+            print(handel)
             # add handel to array of handels
             handels.append(handel)
-        return handels
+        if len(handels) < 1:
+            return 1
+        else:
+            return handels
     # test to be sure handels were scraped
     def check_handels(self, handels):
         # check for handels
@@ -60,8 +66,9 @@ class Scraper:
 
 test = Scraper(key)
 good = test.test_rate_limit()
-if not good:
-    print("rate limit exceeded, try again later...")
+if good != 1:
+    rate_limit = test.auth_request("https://api.github.com/rate_limit").json()["rate"]["reset"]
+    print(f"problem with your auth token or your rate limit was exceeded. If the problem is your rate limit, covert your epoch stamp ({rate_limit}) to your time zone to see when it will reset, use (https://www.epochconverter.com/).")
     exit()
 
 # intantiate new scraper object
@@ -71,13 +78,17 @@ s = Scraper(key)
 request_handles = s.auth_request(repo).json()
 print("finished making request.")
 
-# obtain handels from request
-handels = s.obtain_handels(request_handles)
-print("finished scraping handels.")
+if not request_handles:
+    print(f"Contributor is owner of repo, use their handel: {search.split('/')[0]}.")
+    handels = [search.split('/')[0]]
+else:
+    # obtain handels from request
+    handels = s.obtain_handels(request_handles)
+    print("finished scraping handels.")
 
 # create array of handels from request
 s.check_handels(handels)
-print("more than one handel obtained. checking for emails...")
+print("At least one handel obtained. checking for email(s)...")
 
 # create a dictoionary of handels and emails
 email_handel_dict = {}
