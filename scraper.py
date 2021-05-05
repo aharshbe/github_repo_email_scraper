@@ -28,34 +28,34 @@ class Scraper:
             return 1
         else:
             return 0
-    # obtain handels from repo response
-    def obtain_handels(self, response):
-        handels = []
+    # obtain handles from repo response
+    def obtain_handles(self, response):
+        handles = []
         for key in response:
             # obtain contributor GitHub handles
-            handel = key["login"]
-            print(handel)
-            # add handel to array of handels
-            handels.append(handel)
-        if len(handels) < 1:
+            handle = key["login"]
+            print(handle)
+            # add handle to array of handles
+            handles.append(handle)
+        if len(handles) < 1:
             return 1
         else:
-            return handels
-    # test to be sure handels were scraped
-    def check_handels(self, handels):
-        # check for handels
-        if len(handels) > 0:
-            print("handel(s) found, continuing...")
+            return handles
+    # test to be sure handles were scraped
+    def check_handles(self, handles):
+        # check for handles
+        if len(handles) > 0:
+            print("handle(s) found, continuing...")
         else:
-            print("no handels found, exiting...")
+            print("no handles found, exiting...")
             exit()
-    def obtain_email(self, handel):
-        request_email = f"https://api.github.com/users/{handel}/events/public"
+    def obtain_email(self, handle):
+        request_email = f"https://api.github.com/users/{handle}/events/public"
         obtain_email_response = self.auth_request(request_email).json()
         for response in obtain_email_response:
             try:
                 email = response["payload"]["commits"][0]["author"]["email"]
-                print("found email for "+handel)
+                print("found email for "+handle)
                 return email
             except:
                 system('cls')
@@ -79,25 +79,25 @@ request_handles = s.auth_request(repo).json()
 print("finished making request.")
 
 if not request_handles:
-    print(f"Contributor is owner of repo, use their handel: {search.split('/')[0]}.")
-    handels = [search.split('/')[0]]
+    print(f"Contributor is owner of repo, use their handle: {search.split('/')[0]}.")
+    handles = [search.split('/')[0]]
 else:
-    # obtain handels from request
-    handels = s.obtain_handels(request_handles)
-    print("finished scraping handels.")
+    # obtain handles from request
+    handles = s.obtain_handles(request_handles)
+    print("finished scraping handles.")
 
-# create array of handels from request
-s.check_handels(handels)
-print("At least one handel obtained. checking for email(s)...")
+# create array of handles from request
+s.check_handles(handles)
+print("At least one handle obtained. checking for email(s)...")
 
-# create a dictoionary of handels and emails
-email_handel_dict = {}
-# iterate through handels array of repo to obtain emails
-for handel in handels:
-    # store email and handel in dictionary
-    email_handel_dict[handel] = s.obtain_email(handel)
+# create a dictoionary of handles and emails
+email_handle_dict = {}
+# iterate through handles array of repo to obtain emails
+for handle in handles:
+    # store email and handle in dictionary
+    email_handle_dict[handle] = s.obtain_email(handle)
 system('cls')
-print(f"Here is a dictionary of handels and their emails for {len(email_handel_dict.keys())} contributors of {search}:")
-print(email_handel_dict)
+print(f"Here is a dictionary of handles and their emails for {len(email_handle_dict.keys())} contributors of {search}:")
+print(email_handle_dict)
 
 # EOF
