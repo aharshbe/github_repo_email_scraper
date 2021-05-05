@@ -13,5 +13,11 @@
 * requests module
 * a GitHub personal access token
 
+### Assumptions/Considerations:
+* This will only obtain emails of contributors to repos who sign their commits with an email (it is worth mentioning almost every developer does this for various reasons)
+* You must have access to a GitHub account in order to create your access token (you can query GitHub's API without it but you will almost immediately be rate limited)
+* This tool works best when you pair it with thoughtful searches through GitHub repos that you identify as valuable in your sourcing, i.e., search open source repos that use a programming language or framework that is useful to your organization, etc
+* This currently only obtains the top 30 contributors of any given repo (may update this to paginate in the future). 30 good leads is a start though 😁
+
 #### Author:
 * me (aharshbe)
